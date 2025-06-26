@@ -347,7 +347,7 @@ def manual_config_mode():
         }
     
     # Simpan konfigurasi
-    config_file = "manual_sprite_config.json"
+    config_file = os.path.join(input_dir, "manual_sprite_config.json")
     with open(config_file, 'w') as f:
         json.dump(config, f, indent=2)
     

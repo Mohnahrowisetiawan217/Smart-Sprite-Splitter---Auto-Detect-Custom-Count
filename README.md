@@ -1,5 +1,5 @@
 # Smart Sprite Splitter Auto Detect Custom Count
-Smart Sprite Splitter - Auto Detect &amp; Custom Count 100% Work No Root 🤫🧏‍♂️
+Smart Sprite Splitter - Auto Detect &amp; Custom Count ***100% Work No Root 🤫🧏‍♂️***
 
 
 **Before you using this pls install**

@@ -72,4 +72,4 @@ MIT License
 
 ---
 
-**By:** [Smart Sprite Splitter](https://github.com/username/Mohnahrowisetiawan217)
+**By:** [Mohnahrowisetiawan](https://github.com/username/Mohnahrowisetiawan217)

@@ -1,6 +1,6 @@
 # Smart Sprite Splitter Auto Detect Custom Count
 
-# 🎯 Smart Sprite Splitter ***100% Work No Root*** 🤫🧏‍♂️
+## 🎯 Smart Sprite Splitter ***100% Work No Root*** 🤫🧏‍♂️
 
 
 Tool untuk memisahkan sprite sheet menjadi gambar individual dengan dukungan jumlah sprite yang berbeda-beda per file. Cocok untuk memproses ratusan hingga ribuan file sprite sheet sekaligus.

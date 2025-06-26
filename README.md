@@ -1,4 +1,4 @@
-#🎯 Smart Sprite Splitter 
+# 🎯 Smart Sprite Splitter 
 ***100% Work No Root*** 🤫🧏‍♂️
 
 

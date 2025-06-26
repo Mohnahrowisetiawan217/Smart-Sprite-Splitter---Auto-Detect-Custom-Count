@@ -2,7 +2,7 @@
 Smart Sprite Splitter - Auto Detect &amp; Custom Count 100% Work No Root 🤫🧏‍♂️
 
 
-Before you using this pls install
+**Before you using this pls install**
 ***pip install pillow***
 
 # 🎯 Smart Sprite Splitter

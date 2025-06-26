@@ -88,6 +88,11 @@ def create_sprite_config(input_dir, output_file="sprite_config.json"):
     """
     Buat file konfigurasi untuk mapping jumlah sprite per file
     """
+    # Pastikan folder input ada
+    if not os.path.exists(input_dir):
+        print(f"❌ Folder input '{input_dir}' tidak ditemukan!")
+        return {}
+
     print("🔧 MEMBUAT KONFIGURASI SPRITE")
     print("=" * 50)
     
@@ -115,6 +120,12 @@ def create_sprite_config(input_dir, output_file="sprite_config.json"):
         print(f"[{i:3d}/{len(all_files)}] {filename} -> {detected_count} sprites")
     
     # Simpan konfigurasi
+    # Pastikan output_file path absolute ke input_dir jika hanya nama file
+    if not os.path.isabs(output_file):
+        output_file = os.path.join(input_dir, output_file)
+    output_dir = os.path.dirname(output_file)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     with open(output_file, 'w') as f:
         json.dump(config, f, indent=2)
     
@@ -191,7 +202,18 @@ def batch_split_smart(input_dir="input", output_dir="output",
     """
     print("🚀 SMART SPRITE SPLITTER")
     print("=" * 50)
-    
+
+    # Pastikan folder input ada
+    if not os.path.exists(input_dir):
+        print(f"❌ Folder input '{input_dir}' tidak ditemukan. Membuat folder...")
+        os.makedirs(input_dir)
+        print(f"📁 Folder '{input_dir}' sudah dibuat. Silakan masukkan gambar ke folder ini lalu jalankan ulang.")
+        return
+
+    # Pastikan folder output ada
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     # Load konfigurasi
     sprite_config = load_sprite_config(config_file)
     
@@ -377,3 +399,5 @@ if __name__ == "__main__":
     
     else:
         print("❌ Pilihan tidak valid!")
+
+

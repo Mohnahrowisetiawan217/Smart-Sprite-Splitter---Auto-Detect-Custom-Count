@@ -1,72 +1,72 @@
 # Smart Sprite Splitter
 
-**Smart Sprite Splitter** adalah tool Python untuk memecah (split) gambar sprite sheet menjadi beberapa file gambar kecil secara otomatis maupun manual, dengan deteksi jumlah sprite per gambar.
+**Smart Sprite Splitter** is a Python tool for automatically or manually splitting sprite sheet images into multiple small image files, with automatic sprite count detection.
 
-## Fitur
+## Features
 
-- **Auto-detect jumlah sprite** pada setiap gambar (berbasis transparansi, perubahan warna, atau fallback aspect ratio).
-- **Input manual** jumlah sprite per file jika ingin lebih akurat.
-- **Batch processing** dengan multi-threading (cepat untuk banyak file).
-- **Konfigurasi per file** (bisa edit jumlah sprite di file JSON).
-- **Bisa menggunakan folder input/output dari mana saja** (isi path folder sesuai keinginan, tidak harus di dalam folder project).
+- **Auto-detect sprite count** for each image (based on transparency, color changes, or fallback aspect ratio).
+- **Manual input** for sprite count per file for more accuracy.
+- **Batch processing** with multi-threading (fast for multiple files).
+- **Per-file configuration** (edit sprite count in JSON file).
+- **Flexible input/output folders** (specify any folder path, doesn't need to be inside project folder).
 
-## Cara Pakai
+## Usage
 
-### 1. Instalasi Dependensi
+### 1. Install Dependencies
 
-Pastikan Python 3 sudah terpasang.  
-Install library yang dibutuhkan:
+Make sure Python 3 is installed.  
+Install required libraries:
 
 ```bash
 pip install pillow numpy
 ```
 
-### 2. Jalankan Program
+### 2. Run the Program
 
 ```bash
 python SmartSprite.py
 ```
 
-### 3. Pilih Mode
+### 3. Choose Mode
 
-Saat dijalankan, pilih mode sesuai kebutuhan:
+When running, select the mode according to your needs:
 
-1. **Auto-detect sprite count (cepat)**  
-   Deteksi otomatis jumlah sprite pada setiap gambar.
+1. **Auto-detect sprite count (fast)**  
+   Automatically detect sprite count for each image.
 
-2. **Manual input per file (akurat)**  
-   Input jumlah sprite untuk setiap file secara manual.
+2. **Manual input per file (accurate)**  
+   Manually input sprite count for each file.
 
-3. **Load dari config file**  
-   Gunakan konfigurasi jumlah sprite dari file JSON yang sudah ada.
+3. **Load from config file**  
+   Use sprite count configuration from existing JSON file.
 
-4. **Buat config file saja**  
-   Hanya membuat file konfigurasi jumlah sprite (tanpa split gambar).
+4. **Create config file only**  
+   Only create sprite count configuration file (without splitting images).
 
-### 4. Input Folder
+### 4. Input Folders
 
-- Saat diminta "Input folder" dan "Output folder", **isi dengan path folder yang kamu mau**.
-- Path boleh absolut (misal `D:\Asset Negara\input_sprites`) atau relatif (`input`).
-- Tidak perlu membuat folder khusus di dalam project, program akan otomatis membuat folder jika belum ada.
+- When prompted for "Input folder" and "Output folder", **enter the folder path you want**.
+- Paths can be absolute (e.g., `D:\Game Assets\input_sprites`) or relative (`input`).
+- No need to create special folders inside the project, the program will automatically create folders if they don't exist.
 
-**Contoh:**
+**Example:**
 ```
-Input folder: D:\Asset Negara\input_sprites
-Output folder: D:\Asset Negara\output_sprites
+Input folder: D:\Game Assets\input_sprites
+Output folder: D:\Game Assets\output_sprites
 ```
 
-### 5. Hasil
+### 5. Results
 
-- Gambar hasil split akan disimpan di folder output yang kamu tentukan.
-- File konfigurasi (JSON) akan tersimpan di folder input atau sesuai path yang kamu pilih.
+- Split image results will be saved in the output folder you specified.
+- Configuration file (JSON) will be saved in the input folder or according to the path you choose.
 
-## Catatan
+## Notes
 
-- Jika ingin mengedit jumlah sprite per gambar, edit file konfigurasi JSON yang dihasilkan.
-- Untuk folder dengan spasi, cukup copy-paste path dari Windows Explorer (tidak perlu tanda kutip).
-- Shortcut Windows (.lnk) tidak didukung, gunakan path asli folder.
+- To edit sprite count per image, edit the generated JSON configuration file.
+- For folders with spaces, simply copy-paste the path from Windows Explorer (no quotes needed).
+- Windows shortcuts (.lnk) are not supported, use the actual folder path.
 
-## Lisensi
+## License
 
 MIT License
 

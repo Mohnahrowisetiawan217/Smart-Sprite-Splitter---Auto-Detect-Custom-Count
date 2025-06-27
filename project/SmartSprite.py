@@ -19,7 +19,7 @@ def auto_detect_sprites(img_path, method="transparency"):
     """
     try:
         with Image.open(img_path) as img:
-            # Convert ke RGBA untuk transparency detection
+            # Convert RGBA transparency detection
             if img.mode != 'RGBA':
                 img = img.convert('RGBA')
             
@@ -27,68 +27,57 @@ def auto_detect_sprites(img_path, method="transparency"):
             img_array = np.array(img)
             
             if method == "transparency":
-                # Deteksi berdasarkan kolom transparan
-                alpha_channel = img_array[:, :, 3]  # Alpha channel
+                alpha_channel = img_array[:, :, 3]
                 
-                # Cari kolom yang sepenuhnya transparan
                 transparent_cols = []
                 for x in range(width):
-                    if np.all(alpha_channel[:, x] == 0):  # Kolom transparan
+                    if np.all(alpha_channel[:, x] == 0):
                         transparent_cols.append(x)
                 
-                # Hitung sprite berdasarkan gap transparan
                 if transparent_cols:
-                    # Cari gap yang konsisten
                     gaps = []
                     for i in range(1, len(transparent_cols)):
                         gap = transparent_cols[i] - transparent_cols[i-1]
-                        if gap > 10:  # Min gap 10px
+                        if gap > 10:
                             gaps.append(gap)
                     
                     if gaps:
-                        # Ambil gap yang paling sering muncul
                         sprite_width = max(set(gaps), key=gaps.count)
                         sprite_count = width // sprite_width
                         return max(1, sprite_count)
             
             elif method == "color_change":
-                # Deteksi berdasarkan perubahan warna drastis
                 rgb_array = img_array[:, :, :3]
                 
-                # Hitung rata-rata warna tiap kolom
                 col_colors = np.mean(rgb_array, axis=0)
                 
-                # Deteksi perubahan besar antar kolom
                 changes = []
-                threshold = 30  # Threshold perubahan warna
+                threshold = 30 
                 
                 for x in range(1, width):
                     color_diff = np.linalg.norm(col_colors[x] - col_colors[x-1])
                     if color_diff > threshold:
                         changes.append(x)
                 
-                # Estimasi sprite count dari perubahan
                 if len(changes) > 1:
                     avg_sprite_width = width // (len(changes) + 1)
                     return max(1, width // avg_sprite_width)
             
-            # Fallback: bagi berdasarkan aspect ratio
-            # Asumsi sprite persegi atau mendekati persegi
             if width > height:
-                estimated_sprite_width = height  # Sprite biasanya square
+                estimated_sprite_width = height
                 return max(1, width // estimated_sprite_width)
             else:
                 return 1
                 
     except Exception as e:
         print(f"   ⚠️  Auto-detect gagal untuk {os.path.basename(img_path)}: {e}")
-        return 8  # Default fallback
+        return 8
 
 def create_sprite_config(input_dir, output_file="sprite_config.json"):
     """
     Buat file konfigurasi untuk mapping jumlah sprite per file
     """
-    # Pastikan folder input ada
+    
     if not os.path.exists(input_dir):
         print(f"❌ Folder input '{input_dir}' tidak ditemukan!")
         return {}
@@ -96,7 +85,7 @@ def create_sprite_config(input_dir, output_file="sprite_config.json"):
     print("🔧 MEMBUAT KONFIGURASI SPRITE")
     print("=" * 50)
     
-    # Cari semua file gambar
+    # Find Picture
     all_files = []
     for ext in ["*.png", "*.jpg", "*.jpeg", "*.bmp"]:
         all_files.extend(glob.glob(os.path.join(input_dir, "**", ext), recursive=True))
@@ -119,8 +108,6 @@ def create_sprite_config(input_dir, output_file="sprite_config.json"):
         
         print(f"[{i:3d}/{len(all_files)}] {filename} -> {detected_count} sprites")
     
-    # Simpan konfigurasi
-    # Pastikan output_file path absolute ke input_dir jika hanya nama file
     if not os.path.isabs(output_file):
         output_file = os.path.join(input_dir, output_file)
     output_dir = os.path.dirname(output_file)
@@ -149,22 +136,18 @@ def split_single_sprite_smart(file_info):
     file_path, output_base_dir, sprite_config, input_base_dir = file_info
     
     try:
-        # Dapatkan relative path untuk lookup config
         rel_path = os.path.relpath(file_path, input_base_dir)
         
-        # Cari jumlah sprite untuk file ini
         sprite_count = 8  # default
         if rel_path in sprite_config:
             sprite_count = sprite_config[rel_path]["sprite_count"]
         else:
-            # Auto-detect jika tidak ada di config
             sprite_count = auto_detect_sprites(file_path)
         
-        # Skip jika sprite count = 0 atau 1
         if sprite_count <= 1:
             return (True, file_path, f"⏭️  Skip (hanya {sprite_count} sprite)")
         
-        # Buat folder output
+        # Make folder output
         file_name = os.path.splitext(os.path.basename(file_path))[0]
         rel_dir = os.path.dirname(rel_path)
         
@@ -176,7 +159,7 @@ def split_single_sprite_smart(file_info):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         
-        # Process gambar
+        # Process spirtes
         with Image.open(file_path) as img:
             width, height = img.size
             sprite_width = width // sprite_count
@@ -203,25 +186,25 @@ def batch_split_smart(input_dir="input", output_dir="output",
     print("🚀 SMART SPRITE SPLITTER")
     print("=" * 50)
 
-    # Pastikan folder input ada
+    # Check folder input
     if not os.path.exists(input_dir):
         print(f"❌ Folder input '{input_dir}' tidak ditemukan. Membuat folder...")
         os.makedirs(input_dir)
         print(f"📁 Folder '{input_dir}' sudah dibuat. Silakan masukkan gambar ke folder ini lalu jalankan ulang.")
         return
 
-    # Pastikan folder output ada
+    # Check folder output
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    # Load konfigurasi
+    # Load konfig
     sprite_config = load_sprite_config(config_file)
     
     if not sprite_config:
         print("⚠️  Membuat konfigurasi otomatis...")
         sprite_config = create_sprite_config(input_dir, config_file)
     
-    # Cari semua file
+    # Find file
     all_files = []
     for ext in ["*.png", "*.jpg", "*.jpeg", "*.bmp"]:
         all_files.extend(glob.glob(os.path.join(input_dir, "**", ext), recursive=True))
@@ -236,7 +219,7 @@ def batch_split_smart(input_dir="input", output_dir="output",
     print(f"🔧 Menggunakan {max_workers} thread")
     print("-" * 50)
     
-    # Buat folder output
+    # Make folder output
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
@@ -251,7 +234,7 @@ def batch_split_smart(input_dir="input", output_dir="output",
     total_sprites = 0
     start_time = time.time()
     
-    # Process dengan threading
+    # Process threading
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_file = {executor.submit(split_single_sprite_smart, task): task[0] 
                          for task in file_tasks}
@@ -302,7 +285,7 @@ def manual_config_mode():
     
     input_dir = input("Input folder: ").strip() or "input"
     
-    # Cari semua file
+    # Find semua file
     all_files = []
     for ext in ["*.png", "*.jpg", "*.jpeg", "*.bmp"]:
         all_files.extend(glob.glob(os.path.join(input_dir, "**", ext), recursive=True))
@@ -320,7 +303,7 @@ def manual_config_mode():
     for file_path in all_files:
         filename = os.path.relpath(file_path, input_dir)
         
-        # Auto-detect sebagai saran
+        # Auto-detect
         suggested = auto_detect_sprites(file_path)
         
         while True:
@@ -346,7 +329,6 @@ def manual_config_mode():
             "file_size": os.path.getsize(file_path)
         }
     
-    # Simpan konfigurasi
     config_file = os.path.join(input_dir, "manual_sprite_config.json")
     with open(config_file, 'w') as f:
         json.dump(config, f, indent=2)
@@ -399,6 +381,4 @@ if __name__ == "__main__":
     
     else:
         print("❌ Pilihan tidak valid!")
-
-
 
